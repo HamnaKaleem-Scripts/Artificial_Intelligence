@@ -1,0 +1,46 @@
+import nltk
+import random
+import string
+
+# Download required packages
+nltk.download('punkt')
+nltk.download('wordnet')
+
+from nltk.stem import WordNetLemmatizer
+
+# Basic training data
+greetings = ['hello', 'hi', 'hey', 'greetings']
+greeting_responses = ['Hello!', 'Hi there!', 'Hey!', 'Greetings!']
+
+farewells = ['bye', 'goodbye', 'see you']
+farewell_responses = ['Goodbye!', 'See you later!', 'Take care!']
+
+# Lemmatizer
+lemmatizer = WordNetLemmatizer()
+
+def clean_text(text):
+    text = text.lower()
+    tokens = nltk.word_tokenize(text)
+    tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in string.punctuation]
+    return tokens
+
+def generate_response(user_input):
+    tokens = clean_text(user_input)
+
+    for word in tokens:
+        if word in greetings:
+            return random.choice(greeting_responses)
+        elif word in farewells:
+            return random.choice(farewell_responses)
+
+    return "I'm not sure how to respond to that."
+
+# Run chatbot
+print("AI Bot: Hello! Ask me something. Type 'bye' to exit.")
+
+while True:
+    user_input = input("You: ")
+    if user_input.lower() in ['bye', 'exit', 'quit']:
+        print("AI Bot:", random.choice(farewell_responses))
+        break
+    print("AI Bot:", generate_response(user_input))
